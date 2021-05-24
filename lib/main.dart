@@ -79,6 +79,80 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Widget _buildLanscapeScreen(AppBar appBar){
+    return Scaffold(
+      appBar: appBar,
+      body: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Show Chart'),
+              Switch(
+                value: _showChart,
+                onChanged: (val) {
+                  setState(() {
+                    _showChart = val;
+                  });
+                },
+              ),
+            ],
+          ),
+          _showChart
+              ? Container(
+              height: (MediaQuery.of(context).size.height -
+                  appBar.preferredSize.height -
+                  MediaQuery.of(context).padding.top) *
+                  0.75,
+              child: Chart(getRecentTrans))
+              : Container(
+              height: (MediaQuery.of(context).size.height -
+                  appBar.preferredSize.height -
+                  MediaQuery.of(context).padding.top) *
+                  0.75,
+              child:
+              TransactionList(_transactions, _deleteTransaction))
+        ],
+      ),
+      floatingActionButtonLocation:
+      FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => showBottomSheet(context),
+        elevation: 15,
+      ),
+    );
+  }
+
+  Widget _buildPortraitScreen(AppBar appBar){
+    return Scaffold(
+      appBar: appBar,
+      body: Column(
+        children: <Widget>[
+          Container(
+              height: (MediaQuery.of(context).size.height -
+                  appBar.preferredSize.height -
+                  MediaQuery.of(context).padding.top) *
+                  0.25,
+              child: Chart(getRecentTrans)),
+          Container(
+              height: (MediaQuery.of(context).size.height -
+                  appBar.preferredSize.height -
+                  MediaQuery.of(context).padding.top) *
+                  0.75,
+              child: TransactionList(_transactions, _deleteTransaction))
+        ],
+      ),
+      floatingActionButtonLocation:
+      FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => showBottomSheet(context),
+        elevation: 15,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // WidgetsFlutterBinding.ensureInitialized();
@@ -98,73 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     return isLandscape
-        ? Scaffold(
-            appBar: appBar,
-            body: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Show Chart'),
-                    Switch(
-                      value: _showChart,
-                      onChanged: (val) {
-                        setState(() {
-                          _showChart = val;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                _showChart
-                    ? Container(
-                        height: (MediaQuery.of(context).size.height -
-                                appBar.preferredSize.height -
-                                MediaQuery.of(context).padding.top) *
-                            0.75,
-                        child: Chart(getRecentTrans))
-                    : Container(
-                        height: (MediaQuery.of(context).size.height -
-                                appBar.preferredSize.height -
-                                MediaQuery.of(context).padding.top) *
-                            0.75,
-                        child:
-                            TransactionList(_transactions, _deleteTransaction))
-              ],
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () => showBottomSheet(context),
-              elevation: 15,
-            ),
-          )
-        : Scaffold(
-            appBar: appBar,
-            body: Column(
-              children: <Widget>[
-                Container(
-                    height: (MediaQuery.of(context).size.height -
-                            appBar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) *
-                        0.25,
-                    child: Chart(getRecentTrans)),
-                Container(
-                    height: (MediaQuery.of(context).size.height -
-                            appBar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) *
-                        0.75,
-                    child: TransactionList(_transactions, _deleteTransaction))
-              ],
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () => showBottomSheet(context),
-              elevation: 15,
-            ),
-          );
+        ? _buildLanscapeScreen(appBar)
+        : _buildPortraitScreen(appBar);
   }
 }
